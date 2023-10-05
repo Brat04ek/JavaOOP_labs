@@ -47,18 +47,58 @@ public class StringCalcTest {
         assertEquals(73,calc.add("70\n2,1"));
     }
     
-
-
     @ParameterizedTest
     @ValueSource(strings = {"1,,2,,", "1\n\n2", "1\n,2"})
     public void ThrowExceptionOnTwodelimetr(String input){
     Exception exception = assertThrows(IllegalArgumentException.class,
      () -> calc.add(input));
         
-    String expectedMessage = "Incorrect delimert input";
+    String expectedMessage = "Incorrect delimeter input";
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"//;\n1;2,3\n5", "//(\n1(2(3(5"})
+    public void CustomDelimeter(String input){
+        assertEquals(11, calc.add(input));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"//;\n;1;2", ",1\n2", "\n1,2"})
+    public void IncorrectinputException(String input){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+    () -> calc.add(input));
+        
+    String expectedMessage = "Incorrect input";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+    
+    @ParameterizedTest
+    @ValueSource(strings = {"//;\n1;2;", "1\n2,", "1,2\n"})
+    public void EndWithDelimeterException(String input){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+    () -> calc.add(input));
+        
+    String expectedMessage = "Ends with delimeter";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+    
+    @Test
+    public void IncorrectCustomDelimeter(){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+    () -> calc.add("/;\n1;2"));
+        
+    String expectedMessage = "Incorrect custom delimeter";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    
     }
 }
  
