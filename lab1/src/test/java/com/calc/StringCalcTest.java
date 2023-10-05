@@ -23,6 +23,11 @@ public class StringCalcTest {
 
     @Test
     public void EmptyString(){
+        assertEquals(0, calc.add(""));
+    }
+
+    @Test
+    public void BlankString(){
         assertEquals(0, calc.add(" "));
     }
 
@@ -98,7 +103,17 @@ public class StringCalcTest {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
-    
+    }
+
+    @Test
+    public void NegativeNumberException(){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+    () -> calc.add("//n\n-1,-2"));
+        
+    String expectedMessage = "Passed negative number: -1, -2";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
     }
 }
  

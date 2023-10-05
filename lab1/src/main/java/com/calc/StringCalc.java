@@ -24,22 +24,33 @@ public class StringCalc {
 
         if (numbers.contains(",,")) {
             throw new IllegalArgumentException("Incorrect delimeter input");
-        } else if (Character.isDigit(numbers.charAt(0)) == false && numbers.charAt(0) != ' '){
+        } else if (Character.isDigit(numbers.charAt(0)) == false
+                && numbers.charAt(0) != ' '
+                && numbers.charAt(0) != '-'){
             throw new IllegalArgumentException("Incorrect input");
         } else if (Character.isDigit(numbers.charAt(numbers.length() - 1)) == false){
             throw new IllegalArgumentException("Ends with delimeter");
         }
 
+        String negative_numbers = "";
         for (String number : numbers.split(",")) {
             
             number_1 = Integer.parseInt(number.strip());
+            if (number_1 < 0) {
+                negative_numbers = negative_numbers + number + ", "; 
+            }
             sum = sum + number_1; 
                            
-        } 
+        }
+        
+        if (negative_numbers != ""){
+            negative_numbers =  negative_numbers.substring(0, negative_numbers.length()-2);
+            throw new IllegalArgumentException("Passed negative number: " + negative_numbers);
+        }  
         return sum;
     }
     public static void main(String[] args){
         StringCalc calc = new StringCalc();
-        System.out.println(calc.add(",avb"));
+        System.out.println(calc.add("//n\n-1n-2"));
     }
 }
