@@ -115,5 +115,10 @@ public class StringCalcTest {
 
     assertTrue(actualMessage.contains(expectedMessage));
     }
+
+    @Test
+    public void NumberAbove1000Ignored(){
+        assertEquals(1999, calc.add("1000,999\n1001"));
+    }
 }
  

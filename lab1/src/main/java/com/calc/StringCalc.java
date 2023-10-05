@@ -39,7 +39,9 @@ public class StringCalc {
             if (number_1 < 0) {
                 negative_numbers = negative_numbers + number + ", "; 
             }
-            sum = sum + number_1; 
+            if (number_1 <= 1000) {
+                sum = sum + number_1; 
+            }
                            
         }
         
@@ -51,6 +53,6 @@ public class StringCalc {
     }
     public static void main(String[] args){
         StringCalc calc = new StringCalc();
-        System.out.println(calc.add("//n\n-1n-2"));
+        System.out.println(calc.add("//n\n1000n999,1001"));
     }
 }
