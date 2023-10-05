@@ -1,6 +1,8 @@
 package com.calc;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,5 +42,23 @@ public class StringCalcTest {
         assertEquals(47, calc.add(input));
     }
     
+    @Test
+    public void EnterAsDelimetr(){
+        assertEquals(73,calc.add("70\n2,1"));
+    }
+    
+
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1,,2,,", "1\n\n2", "1\n,2"})
+    public void ThrowExceptionOnTwodelimetr(String input){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> calc.add(input));
+        
+    String expectedMessage = "Incorrect delimert input";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
  
