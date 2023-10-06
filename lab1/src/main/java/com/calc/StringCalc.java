@@ -15,9 +15,35 @@ public class StringCalc {
         if (numbers.startsWith("//")){
             String[] array = numbers.split("\n", 2);
             numbers = array[1];
+            
             String delimeter = array[0];
             delimeter = delimeter.substring(2);
-            numbers = numbers.replace(delimeter, ",");
+            if (delimeter.contains("[") || delimeter.contains("]")){
+                if ((delimeter.chars().filter(ch -> ch == '[').count()
+                 != (delimeter.chars().filter(ch -> ch == ']').count())) ){
+
+                        throw new IllegalArgumentException("Incorrect custom delimeter");
+                    
+                } else {
+                    array = delimeter.split("]");
+                    for (String delimeter_i : array) {
+
+                        if (delimeter_i.contains("[") != true){
+                            throw new IllegalArgumentException("Incorrect custom delimeter");
+                        }
+
+                        delimeter_i = delimeter_i.substring(1, delimeter_i.length());
+
+                        if (delimeter_i.contains("[")){
+                            throw new IllegalArgumentException("Incorrect custom delimeter");
+                        }
+                        numbers = numbers.replace(delimeter_i, ",");
+                    }
+                }
+            
+            } else {
+                numbers = numbers.replace(delimeter, ",");
+            }
         }
 
         numbers = numbers.replace("\n", ",");
@@ -34,8 +60,11 @@ public class StringCalc {
 
         String negative_numbers = "";
         for (String number : numbers.split(",")) {
-            
-            number_1 = Integer.parseInt(number.strip());
+            try {
+                number_1 = Integer.parseInt(number.strip());                
+            } catch (Exception e) {
+                throw new IllegalArgumentException("Incorrect input: " + number);
+            }
             if (number_1 < 0) {
                 negative_numbers = negative_numbers + number + ", "; 
             }
@@ -53,6 +82,6 @@ public class StringCalc {
     }
     public static void main(String[] args){
         StringCalc calc = new StringCalc();
-        System.out.println(calc.add("//n\n1000n999,1001"));
+        System.out.println(calc.add("//[***]\n1***2,3\n5"));
     }
 }

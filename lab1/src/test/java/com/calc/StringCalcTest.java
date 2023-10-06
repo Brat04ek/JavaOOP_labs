@@ -71,7 +71,7 @@ public class StringCalcTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"//;\n;1;2", ",1\n2", "\n1,2"})
+    @ValueSource(strings = {"//;\n;1;2", ",1\n2", "\n1,2", "1+2"})
     public void IncorrectinputException(String input){
     Exception exception = assertThrows(IllegalArgumentException.class,
     () -> calc.add(input));
@@ -119,6 +119,24 @@ public class StringCalcTest {
     @Test
     public void NumberAbove1000Ignored(){
         assertEquals(1999, calc.add("1000,999\n1001"));
+    }
+
+    @Test
+    public void CustomDelimeterAnyLenght(){
+        assertEquals(12, calc.add("//[***]\n2***3,6\n1"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"//[++][\n1,2", "//][h]\n1,2", "//[[]]\n1,2", "//[\n1,2", "//][[]\n1,2", "//]\n1,2"})
+    public void CustomDelimeterInvalidInputException(String input){
+    Exception exception = assertThrows(IllegalArgumentException.class,
+    () -> calc.add(input));
+        
+    String expectedMessage = "Incorrect custom delimeter";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+
     }
 }
  
