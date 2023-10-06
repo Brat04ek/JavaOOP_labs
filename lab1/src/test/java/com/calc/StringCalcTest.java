@@ -136,7 +136,16 @@ public class StringCalcTest {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+    }
 
+    @Test
+    public void MultipleCustomDelimetes(){
+        assertEquals(19, calc.add("//[*][%]\n2*3%7,6\n1"));
+    }
+
+    @Test
+    public void MultipleCustomDelimetes_1(){
+        assertEquals(20, calc.add("//[*][%][&]\n2*3%7&1,6\n1"));
     }
 }
  

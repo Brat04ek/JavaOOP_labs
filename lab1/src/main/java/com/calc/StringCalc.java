@@ -82,6 +82,6 @@ public class StringCalc {
     }
     public static void main(String[] args){
         StringCalc calc = new StringCalc();
-        System.out.println(calc.add("//[***]\n1***2,3\n5"));
+        System.out.println(calc.add("//[*][%][&]\n2*3%7&1,6\n1"));
     }
 }
