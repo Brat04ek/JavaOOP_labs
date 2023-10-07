@@ -155,5 +155,9 @@ public class StringCalcTest {
     public void MultipleCustomDelimetesAnyLenghts_1(){
         assertEquals(13, calc.add("//[******][%]\n2******3%1,6\n1"));
     }
+    @Test
+    public void MultipleCustomDelimetesAnyLenghts_2(){
+        assertEquals(4,calc.add("//[?][???][??]\n1???1001?1\n1??1"));
+    }
 }
  

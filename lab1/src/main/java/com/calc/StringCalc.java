@@ -1,6 +1,13 @@
 package com.calc;
 
+import java.util.Arrays;
+import java.util.Comparator;
+
 public class StringCalc {
+    /**
+     * @param numbers
+     * @return
+     */
     int add(String numbers){
         int sum = 0;
         int number_1 = 0;
@@ -26,6 +33,19 @@ public class StringCalc {
                     
                 } else {
                     array = delimeter.split("]");
+                            Arrays.sort(array, new Comparator<String>() {
+                            @Override
+                            public int compare(String s1, String s2) {
+                                return Integer.compare(s1.length(), s2.length());
+                            }
+                        });
+
+                        // Обратный порядок для получения желаемого результата
+                        for (int i = 0; i < array.length / 2; i++) {
+                            String temp = array[i];
+                            array[i] = array[array.length - 1 - i];
+                            array[array.length - 1 - i] = temp;
+                        }
                     for (String delimeter_i : array) {
 
                         if (delimeter_i.contains("[") != true){
@@ -37,6 +57,7 @@ public class StringCalc {
                         if (delimeter_i.contains("[")){
                             throw new IllegalArgumentException("Incorrect custom delimeter");
                         }
+
                         numbers = numbers.replace(delimeter_i, ",");
                     }
                 }
@@ -82,6 +103,6 @@ public class StringCalc {
     }
     public static void main(String[] args){
         StringCalc calc = new StringCalc();
-        System.out.println(calc.add("//[****][%%]\n2****3%%7,6\n1"));
+        System.out.println(calc.add("//[?][???][??]\n1???1001?1\n1??1"));
     }
 }
