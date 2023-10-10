@@ -1,0 +1,50 @@
+plugins {
+    id 'java'
+    id 'jacoco'
+}
+
+
+jacoco {
+    toolVersion = "0.8.9"
+    reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+
+
+
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+
+jacocoTestReport {
+    reports {
+        xml.required = false
+        csv.required = false
+        html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+    }
+}
+
+
+jar {
+    manifest {
+        attributes('Main-Class': 'com.calc.StringCalc')
+    }
+}
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+    
+
+}
+
+test {
+    finalizedBy jacocoTestReport // report is always generated after tests run
+	useJUnitPlatform()
+	testLogging {
+		events "passed", "skipped", "failed"
+	}
+}
