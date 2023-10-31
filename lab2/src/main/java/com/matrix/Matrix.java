@@ -1,5 +1,7 @@
 package com.matrix;
 
+import java.util.Arrays;
+
 public class Matrix {
 
     private double[][] matrix;
@@ -129,5 +131,21 @@ public class Matrix {
                 || columns <= 0 || columns > this.getNumColumns()){
                     throw new IllegalArgumentException("Element num is bigger than matrix dim");
                 }
+    }
+    @Override
+    public int hashCode(){
+        return Arrays.deepHashCode(this.matrix);
+    }
+
+    @Override
+    public boolean equals(Object o){
+        if (this == o){
+            return true;
+        }
+        if(o == null || o.getClass() != this.getClass()){
+            return false;
+        }
+        Matrix mat_new = (Matrix) o;
+        return Arrays.deepEquals(this.matrix, mat_new.matrix);
     }
 }

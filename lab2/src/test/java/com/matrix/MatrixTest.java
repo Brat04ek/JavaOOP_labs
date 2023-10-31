@@ -2,6 +2,7 @@ package com.matrix;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -218,5 +219,87 @@ public class MatrixTest {
     String actualMessage = exception.getMessage();
 
     assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void hashCode_test(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 1,2);
+        mat.setRow(2, 3,4);
+        
+        Matrix mat_new = new Matrix(mat);
+        assertEquals(mat_new.hashCode(), mat.hashCode());
+    }
+
+    @Test
+    public void equals_test(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 1,2);
+        mat.setRow(2, 3,4);
+        
+        Matrix mat_new = new Matrix(mat);
+
+        assertTrue(mat.equals(mat_new));
+    }
+
+    @Test
+    public void ImutableMatrix_Constuct(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 1,2);
+        mat.setRow(2, 4, 5);
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+        assertEquals(mat.getValue(1, 1), im_mat.getValue(1, 1));
+    }
+
+    @Test
+    public void ExceptionImutableMatrix(){
+        ImutableMatrix im_mat = new ImutableMatrix(1, 2);
+        Exception exception = assertThrows(IllegalStateException.class, () -> im_mat.setValue(1, 2, 22));
+        String expecterMessage = "Can't change imutable matrix"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));
+    }
+
+    @Test
+    public void ExceptionImutableMatrix_1(){
+        ImutableMatrix im_mat = new ImutableMatrix(1, 2);
+        Exception exception = assertThrows(IllegalStateException.class, () -> im_mat.setRow(1, 2, 22));
+        String expecterMessage = "Can't change imutable matrix"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));
+    }
+
+    @Test
+    public void ExceptionImutableMatrix_2(){
+        ImutableMatrix im_mat = new ImutableMatrix(1, 2);
+        Exception exception = assertThrows(IllegalStateException.class, () -> im_mat.setColumn(1, 2, 22));
+        String expecterMessage = "Can't change imutable matrix"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));
+    }
+
+    @Test
+    public void ImutableMatrix_Constuct_1(){
+        ImutableMatrix im_mat = new ImutableMatrix();
+        assertEquals("0x0", im_mat.getDimension());
+    }
+
+    @Test
+    public void ImutableMatrix_Constuct_2(){
+        mat = new Matrix(2, 2);
+        ImutableMatrix im_mat = new ImutableMatrix(mat, new int[]{1,1}, new int[]{2,1});
+        assertEquals("2x1", im_mat.getDimension());
+    }
+
+    @Test
+    public void equals_test_1(){
+        mat = new Matrix(2, 2);
+        assertTrue(mat.equals(mat));
+    }
+
+    @Test
+    public void equals_test_2(){
+        mat = new Matrix(2, 2);
+        assertFalse(mat.equals(null));
     }
 }
