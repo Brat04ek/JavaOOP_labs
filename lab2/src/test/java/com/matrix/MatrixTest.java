@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
 public class MatrixTest {
@@ -59,5 +61,162 @@ public class MatrixTest {
         assertEquals("1x4", mat_1.getDimension());
     }
     
+    @Test
+    public void ThrowExceptionOnCoping(){
+    mat = new Matrix(3, 5);
 
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat = new Matrix(mat,new int[]{-1,2}, new int[]{2,2}));
+        
+    String expectedMessage = "Num of elem can't be negative";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void ThrowExceptionOnCoping_1(){
+    mat = new Matrix(3, 5);
+
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat = new Matrix(mat,new int[]{3,2}, new int[]{2 ,2}));
+        
+    String expectedMessage = "Num of start element must be smaller";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void ThrowExceptionOnCoping_2(){
+    mat = new Matrix(3, 5);
+
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat = new Matrix(mat,new int[]{4,2}, new int[]{2 ,2}));
+        
+    String expectedMessage = "Element num is bigger than matrix dim";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void setCertainValue(){
+        mat = new Matrix(2, 2);
+        mat.setValue(2, 2, 16);
+        assertEquals(16, mat.getValue(2,2));
+    }
+
+    @Test
+    public void ExceptionOnSetCertainValue(){
+    mat = new Matrix(2, 2);
+
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.setValue(2, 3, 2));
+        
+    String expectedMessage = "Element num is bigger than matrix dim";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void ExceptionOnSetCertainValue_2(){
+    mat = new Matrix(2, 2);
+    mat.setValue(1, 1, 2);
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.getValue(1, 3));
+        
+    String expectedMessage = "Element num is bigger than matrix dim";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void ExceptionOnSetCertainValue_3(){
+    mat = new Matrix(2, 2);
+    mat.setValue(1, 1, 2);
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.getValue(0, 2));
+        
+    String expectedMessage = "Element num is bigger than matrix dim";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void SetCertainRows(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 2,3);
+
+        Matrix mat_1 = mat.getRow(1);
+        assertEquals(2, mat_1.getValue(1, 1));
+        assertEquals(3, mat_1.getValue(1, 2));
+    }
+
+    @Test
+    public void ExceptionOnSetCertainRows(){
+    mat = new Matrix(2, 2);
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.setRow(1, 2,3,3));
+        
+    String expectedMessage = "Number of values and row in matrix dim must be equal: 3 != 2";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    public void ExceptionOnSetCertainRows_1(){
+    mat = new Matrix(2, 2);
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.setRow(1, 2));
+        
+    String expectedMessage = "Number of values and row in matrix dim must be equal: 1 != 2";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
+    
+    @Test
+    public void GetRowsArray(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 6,5);
+        double[] expectedRows = {6,5};
+        double[] actualRows = mat.getRowArray(1);
+        assertTrue(Arrays.equals(expectedRows, actualRows));
+    }
+
+    @Test
+    public void SetCertainColumn(){
+        mat = new Matrix(2, 2);
+        mat.setColumn(1, 2,3);
+
+        Matrix mat_1 = mat.getColumn(1);
+        assertEquals(2, mat_1.getValue(1, 1));
+        assertEquals(3, mat_1.getValue(2, 1));
+    }
+
+    @Test
+    public void GetColumnArray(){
+        mat = new Matrix(2, 2);
+        mat.setColumn(1, 6,5);
+        double[] expectedColumn = {6,5};
+        double[] actualColumn = mat.getColumnArray(1);
+        assertTrue(Arrays.equals(expectedColumn, actualColumn));
+    }
+    
+    @Test
+    public void ExceptionOnSetCertainColumn_1(){
+    mat = new Matrix(2, 2);
+    Exception exception = assertThrows(IllegalArgumentException.class,
+     () -> mat.setColumn(1, 2));
+        
+    String expectedMessage = "Number of values and row in matrix dim must be equal: 1 != 2";
+    String actualMessage = exception.getMessage();
+
+    assertTrue(actualMessage.contains(expectedMessage));
+    }
 }
