@@ -217,11 +217,51 @@ public class Matrix {
         }
         this.matrix = matrix_T.matrix;
     }
-    
+
     public void diagonalize(double... vector){
         this.matrix = new double[vector.length][vector.length];
         for (int i = 0; i < vector.length; i++) {
             this.matrix[i][i] = vector[i]; 
         }
+    }
+    public void unit(int order){
+        if(order<0){
+            throw new IllegalArgumentException(String.format("Order of matrix can't be negative: %d", order));
+        }
+        this.matrix = new double[order][order];
+        for (int i = 0; i < matrix.length; i++) {
+            this.matrix[i][i] = 1;
+        }
+    }
+
+    
+
+    public void setRandomRowMatrix(int row_lenght, double min, double max){
+        if(row_lenght < 0){
+            throw new IllegalArgumentException(String.format("Row lenght can't be negative: %d", row_lenght));
+        }
+        this.matrix = new double[1][row_lenght];
+        for (int i = 0; i < matrix[0].length; i++) {
+            this.matrix[0][i] = Math.random()*(max - min + 1) + min;
+        }
+    }
+
+    public void setRandomRowMatrix(int row_lenght){
+        this.setRandomRowMatrix(row_lenght, -10, 10);
+    }
+
+
+    public void setRandomColumnMatrix(int column_lenght, double min, double max){
+        if(column_lenght < 0){
+            throw new IllegalArgumentException(String.format("Column lenght can't be negative: %d", column_lenght));
+        }
+        this.matrix = new double[column_lenght][1];
+        for (int i = 0; i < matrix.length; i++) {
+            this.matrix[i][0] = Math.random()*(max - min + 1) + min;
+        }
+    }
+
+    public void setRandomColumnMatrix(int column_lenght){
+        this.setRandomColumnMatrix(column_lenght, -10, 10);
     }
 }

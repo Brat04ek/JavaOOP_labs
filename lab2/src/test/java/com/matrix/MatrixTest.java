@@ -407,4 +407,60 @@ public class MatrixTest {
         assertEquals( -2, mat.getValue(2, 2));
         assertEquals(5, mat.getValue(3, 3));
     }
+    
+    @Test
+    public void unitMatrix(){
+        mat = new Matrix();
+        mat.unit(3);
+        assertEquals("3x3", mat.getDimension());
+        assertEquals(Arrays.hashCode(new double[]{1,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
+        assertEquals(Arrays.hashCode(new double[]{0,1,0}), Arrays.hashCode(mat.getColumnArray(2)));
+        assertEquals(Arrays.hashCode(new double[]{0,0,1}), Arrays.hashCode(mat.getColumnArray(3)));
+    }
+
+    @Test
+    public void ExceptionUnitMatrix(){
+        mat = new Matrix();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.unit(-1));
+        String expecterMessage = "Order of matrix can't be negative: -1"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));        
+    }
+
+    @Test
+    public void setRandomRowMatrixTest(){
+        mat = new Matrix();
+        mat.setRandomRowMatrix(3);
+        assertEquals("1x3", mat.getDimension());
+    }
+
+    @Test
+    public void ExceptionsetRandomRowMatrix(){
+        mat = new Matrix();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.setRandomRowMatrix(-3));
+        String expecterMessage = "Row lenght can't be negative: -3"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));        
+    }
+
+    @Test
+    public void ExceptionsetRandomColumnMatrix(){
+        mat = new Matrix();
+
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.setRandomColumnMatrix(-3));
+        String expecterMessage = "Column lenght can't be negative: -3"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));        
+    }
+    @Test
+    public void setRandomColumnMatrixTest(){
+    mat = new Matrix();
+    mat.setRandomColumnMatrix(3);
+    assertEquals("3x1", mat.getDimension());
+    }
 }
