@@ -302,4 +302,109 @@ public class MatrixTest {
         mat = new Matrix(2, 2);
         assertFalse(mat.equals(null));
     }
+
+    @Test
+    public void add_value(){
+        mat = new Matrix(2, 2);
+        mat.add(2);
+        assertEquals(2, mat.getValue(1, 1));
+    }
+
+    @Test
+    public void add_matrix(){
+        mat = new Matrix(2, 2);
+        mat.add(2);
+        Matrix mat_1 = new Matrix(2, 2);
+        mat_1.setRow(1, 2,3);
+        mat_1.setRow(2, 5,6); 
+        mat.add(mat_1);
+        assertEquals(Arrays.hashCode(new double[]{4,5}), Arrays.hashCode(mat.getRowArray(1)));
+        assertEquals(Arrays.hashCode(new double[]{7,8}), Arrays.hashCode(mat.getRowArray(2)));
+    }
+
+    @Test
+    public void ExceptionAdd_matrix(){
+        mat = new Matrix(2, 2);
+        Matrix mat_1 = new Matrix(3, 3);
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.add(mat_1));
+        String expecterMessage = "Matrix must have same dimension: 2x2, 3x3"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));        
+    }
+
+    @Test
+    public void addToRowTest(){
+        mat = new Matrix(2, 2);
+        mat.add(2);
+        mat.addToRow(1, 1);
+        assertEquals(3, mat.getValue(1, 1));
+    }
+
+    @Test
+    public void addToColumnTest(){
+        mat = new Matrix(2, 2);
+        mat.add(2);
+        mat.addToColumn(2, 1);
+        assertEquals(3, mat.getValue(1, 2));
+    }
+
+    @Test
+    public void multiplyByScalar(){
+        mat = new Matrix(2, 2);
+        mat.setRow(1, 2, 4);
+        mat.setRow(2, 6, 1);
+
+        mat.multiply(3);
+        assertEquals(Arrays.hashCode(new double[]{6,12}), Arrays.hashCode(mat.getRowArray(1)));
+        assertEquals(Arrays.hashCode(new double[]{18,3}), Arrays.hashCode(mat.getRowArray(2)));
+    }
+
+    @Test
+    public void ExceptionMultiply(){
+        mat = new Matrix(2, 2);
+        Matrix mat_1 = new Matrix(3, 3);
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.multiply(mat_1));
+        String expecterMessage = "Column from matrix A and Rows from matrix B must be equal: 2x2, 3x3"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage));        
+    }
+
+    @Test
+    public void MultiplyMatrix(){
+        mat = new Matrix(2, 3);
+        mat.setRow(1, 1,2,3);
+        mat.setRow(2, 6,5,6);
+
+        Matrix mat_1 = new Matrix(3, 2);
+        mat_1.setColumn(1, 2,1,2);
+        mat_1.setColumn(2, 3,5,5);
+
+        mat.multiply(mat_1);
+        assertEquals(Arrays.hashCode(new double[]{10,28}), Arrays.hashCode(mat.getRowArray(1)));
+        assertEquals(Arrays.hashCode(new double[]{29,73}), Arrays.hashCode(mat.getRowArray(2)));
+    }
+
+    @Test
+    public void transposeMatrix(){
+        mat = new Matrix(2, 3);
+        mat.setRow(1, 2,5,2);
+        mat.setRow(2, 4,5,6);
+        mat.transpose();
+        assertEquals("3x2", mat.getDimension());
+        assertEquals(Arrays.hashCode(new double[]{2,5,2}), Arrays.hashCode(mat.getColumnArray(1)));
+        assertEquals(Arrays.hashCode(new double[]{4,5,6}), Arrays.hashCode(mat.getColumnArray(2)));
+    }
+
+    @Test
+    public void diagonalizeMatrix(){
+        mat = new Matrix();
+        mat.diagonalize(1,-2,5);
+        assertEquals("3x3", mat.getDimension());
+        assertEquals(1, mat.getValue(1, 1));
+        assertEquals(0, mat.getValue(2, 1));
+        assertEquals( -2, mat.getValue(2, 2));
+        assertEquals(5, mat.getValue(3, 3));
+    }
 }

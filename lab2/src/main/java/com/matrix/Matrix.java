@@ -60,7 +60,7 @@ public class Matrix {
     }
 
     public void setRow(int row_n, double... values){
-        if(values.length != this.getNumRows()){
+        if(values.length != this.getNumColumns()){
             throw new IllegalArgumentException(
                 String.format("Number of values and row in matrix dim must be equal: %d != %d", values.length, this.getNumRows()));
         }
@@ -86,7 +86,7 @@ public class Matrix {
     }
 
     public void setColumn(int column_n, double... values){
-        if(values.length != this.getNumColumns()){
+        if(values.length != this.getNumRows()){
             throw new IllegalArgumentException(
                 String.format("Number of values and row in matrix dim must be equal: %d != %d", values.length, this.getNumColumns()));
         }
@@ -103,8 +103,8 @@ public class Matrix {
     }
 
     public double[] getColumnArray(int column_n){
-        CheckForNumInMatrix(column_n, 1);
-        double[] column = new double[this.getNumColumns()];
+        CheckForNumInMatrix(1,column_n);
+        double[] column = new double[this.getNumRows()];
         for (int i = 0; i < column.length; i++) {
             column[i] = this.matrix[i][column_n - 1];
         }
@@ -147,5 +147,81 @@ public class Matrix {
         }
         Matrix mat_new = (Matrix) o;
         return Arrays.deepEquals(this.matrix, mat_new.matrix);
+    }
+
+    public void add(double value){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                this.matrix[i][j] = this.matrix[i][j] + value;
+            }
+        }
+    }
+
+    public void add(Matrix mat){
+        if (this.matrix.length != mat.matrix.length || this.matrix[0].length != mat.matrix[0].length){
+            throw new IllegalArgumentException(String.format("Matrix must have same dimension: %s, %s", 
+                                                this.getDimension(), mat.getDimension()));
+        }
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                this.matrix[i][j] = this.matrix[i][j] + mat.matrix[i][j];
+            }
+        }
+    }
+
+    public void addToRow(int row_n, double value){
+        CheckForNumInMatrix(row_n, 1);
+        for (int i = 0; i < matrix[0].length; i++) {
+            this.matrix[row_n - 1][i] = this.matrix[row_n - 1][i] + value;
+        }
+    }
+    
+    public void addToColumn(int column_n, double value){
+        CheckForNumInMatrix(column_n, 1);
+        for (int i = 0; i < matrix.length; i++) {
+            this.matrix[i][column_n - 1] = this.matrix[i][column_n - 1] + value;
+        }
+    }
+
+    public void multiply(double scalar){
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                this.matrix[i][j] = this.matrix[i][j] * scalar;
+            }
+        }        
+    }
+
+    public void multiply(Matrix mat){
+        if(this.getNumColumns() != mat.getNumRows()){
+            throw new IllegalArgumentException(String.format
+                ("Column from matrix A and Rows from matrix B must be equal: %s, %s",this.getDimension() ,mat.getDimension()));
+        }
+        Matrix matrix_new = new Matrix(this.getNumRows(), mat.getNumColumns());
+        for (int i = 0; i < matrix_new.matrix.length; i++) {
+            for (int j = 0; j < matrix_new.matrix[0].length; j++) {
+                // matrix C
+                for (int k = 0; k < this.getNumColumns(); k++) {
+                    matrix_new.matrix[i][j] = matrix_new.matrix[i][j] + this.matrix[i][k] * mat.matrix[k][j];
+                }
+            }
+        }
+        this.matrix = matrix_new.matrix;
+    }
+    
+    public void transpose(){
+        Matrix matrix_T = new Matrix(getNumColumns(), getNumRows());
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[0].length; j++) {
+                matrix_T.matrix[j][i] = this.matrix[i][j];
+            }
+        }
+        this.matrix = matrix_T.matrix;
+    }
+    
+    public void diagonalize(double... vector){
+        this.matrix = new double[vector.length][vector.length];
+        for (int i = 0; i < vector.length; i++) {
+            this.matrix[i][i] = vector[i]; 
+        }
     }
 }
