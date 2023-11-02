@@ -463,4 +463,111 @@ public class MatrixTest {
     mat.setRandomColumnMatrix(3);
     assertEquals("3x1", mat.getDimension());
     }
+
+    @Test
+    public void triangularShapeUpperMatrix(){
+    mat = new Matrix(3, 2);
+    mat.setColumn(1, 2, 1, 3);
+    mat.setColumn(2, 1, 0, 5);
+
+    mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{2,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{1,-0.5,0}), Arrays.hashCode(mat.getColumnArray(2)));
+    }
+
+    @Test
+    public void triangularShapeUpperMatrix_1(){
+    mat = new Matrix(3, 2);
+    mat.setColumn(1, 0,2,3);
+    mat.setColumn(2, 2,1,4);
+
+    mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{2,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{1,2,0}), Arrays.hashCode(mat.getColumnArray(2)));
+    }
+
+    @Test
+    public void triangularShapeUpperMatrix_2(){
+    mat = new Matrix(2, 3);
+    mat.setRow(1, 0,2,3);
+    mat.setRow(2, 2,1,4);
+
+    mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{2,1,4}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{0,2,3}), Arrays.hashCode(mat.getRowArray(2)));
+    }
+
+    @Test
+    public void triangularShapeUpperMatrix_3(){
+    mat = new Matrix(3, 3);
+    mat.setColumn(1, 2,1,2);
+    mat.setColumn(2, 3,4,5);
+    mat.setColumn(3, 0,0,0);
+
+    mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{2,3,0}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{0,2.5,0}), Arrays.hashCode(mat.getRowArray(2)));
+    assertEquals(Arrays.hashCode(new double[]{0,0,0}), Arrays.hashCode(mat.getRowArray(3)));
+    }
+
+    @Test
+    public void triangularShapeUpperMatrix_4(){
+    mat = new Matrix(3, 3);
+    mat.setColumn(1, 0,0,0);
+    mat.setColumn(2, 2,1,2);
+    mat.setColumn(3, 1,6,3);
+
+    mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{0,2,1}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{0,1,6}), Arrays.hashCode(mat.getRowArray(2)));
+    assertEquals(Arrays.hashCode(new double[]{0,0,-9}), Arrays.hashCode(mat.getRowArray(3)));
+    }
+
+    @Test
+    public void triangularShapeLowerMatrix(){
+    mat = new Matrix(2, 3);
+    mat.setRow(1, 2,3,4);
+    mat.setRow(2, 1,2,1);
+
+    mat.triangularShapeLower();
+    assertEquals(Arrays.hashCode(new double[]{-2,-5,0}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{1,2,1}), Arrays.hashCode(mat.getRowArray(2)));
+    }
+
+    @Test
+    public void triangularShapeLowerMatrix_1(){
+    mat = new Matrix(3, 2);
+    mat.setColumn(1, 2,3,4);
+    mat.setColumn(2, 1,2,1);
+
+    mat.triangularShapeLower();
+    assertEquals(Arrays.hashCode(new double[]{0,-5,4}), Arrays.hashCode(mat.getColumnArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{0,0,1}), Arrays.hashCode(mat.getColumnArray(2)));
+    }
+
+    @Test
+    public void triangularShapeLowerMatrix_2(){
+    mat = new Matrix(3, 3);
+    mat.setColumn(1, 3,4,6);
+    mat.setColumn(2, 2,2,1);
+    mat.setColumn(3, 1,0,0);
+
+    mat.triangularShapeLower();
+    assertEquals(Arrays.hashCode(new double[]{4,0,0}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{4,2,0}), Arrays.hashCode(mat.getRowArray(2)));
+    assertEquals(Arrays.hashCode(new double[]{3,2,1}), Arrays.hashCode(mat.getRowArray(3)));
+    }
+
+    @Test
+    public void triangularShapeLowerMatrix_3(){
+    mat = new Matrix(3, 3);
+    mat.setColumn(1, 2,3,4);
+    mat.setColumn(2, 1,2,1);
+    mat.setColumn(3, 0,0,0);
+
+    mat.triangularShapeLower();
+    assertEquals(Arrays.hashCode(new double[]{0.5,0,0}), Arrays.hashCode(mat.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{3,2,0}), Arrays.hashCode(mat.getRowArray(2)));
+    assertEquals(Arrays.hashCode(new double[]{4,1,0}), Arrays.hashCode(mat.getRowArray(3)));
+    }
 }

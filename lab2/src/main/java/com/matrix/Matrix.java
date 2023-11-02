@@ -264,4 +264,79 @@ public class Matrix {
     public void setRandomColumnMatrix(int column_lenght){
         this.setRandomColumnMatrix(column_lenght, -10, 10);
     }
+
+    public void triangularShapeUpper(){
+        int LowestLenght;
+        if (this.getNumColumns() < this.getNumRows()) {
+            LowestLenght = this.getNumColumns();
+        } else {
+            LowestLenght = this.getNumRows();
+        }
+        for (int i = 0; i < LowestLenght; i++) {
+            boolean matrix_swaped = false;
+            for (int j = i; j < this.getNumRows(); j++) {
+                if (matrix_swaped) {
+                    
+                } else {
+                    if (this.matrix[j][i] != 0) {
+                        double[] temp = this.matrix[i];
+                        this.matrix[i] = this.matrix[j];
+                        this.matrix[j] = temp;
+                        matrix_swaped = true;
+                    }
+                }
+            }
+            double first_d = this.matrix[i][i];
+            for (int j = 1 + i; j < this.getNumRows(); j++) {
+                double other_d = this.matrix[j][i];
+                if (first_d != 0) {
+                    double alpha = other_d / first_d;
+                    for (int k = 0; k < this.getNumColumns(); k++) {
+                        this.matrix[j][k] = this.matrix[j][k] - alpha*this.matrix[i][k];
+                    }
+                } 
+            }
+        }       
+    }
+
+    public void triangularShapeLower(){
+        int LastDigitOfTriangul;
+        if (this.getNumColumns() < this.getNumRows()) {
+            LastDigitOfTriangul = 0;
+        } else {
+            LastDigitOfTriangul = this.getNumColumns() - this.getNumRows();
+        }
+        int count_backing = 0;
+        for (int i = this.getNumColumns() - 1; i > LastDigitOfTriangul - 1; i--) {
+            count_backing++; 
+            int row_pivot = this.getNumRows() - count_backing;
+
+            Boolean matrix_swaped = false;
+            for (int j = row_pivot; j > -1; j--) {
+                if(matrix_swaped){
+
+                } else {
+                    if (this.matrix[j][i] != 0) {
+                        double[] temp = this.matrix[row_pivot];
+                        this.matrix[row_pivot] = this.matrix[j];
+                        this.matrix[j] = temp;
+                        matrix_swaped = true;
+                    }
+                }
+                
+            }
+            
+            double first_d = this.matrix[row_pivot][i];
+            
+            for (int j = row_pivot - 1; j > -1 ; j--) {
+                double other_d = this.matrix[j][i];
+                if(first_d != 0) {
+                    double alpha = other_d / first_d;
+                    for (int k = 0; k < this.getNumColumns(); k++) {
+                        this.matrix[j][k] = this.matrix[j][k] - alpha*this.matrix[row_pivot][k];
+                    }
+                }
+            }
+        }     
+    }
 }
