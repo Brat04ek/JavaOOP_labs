@@ -570,4 +570,90 @@ public class MatrixTest {
     assertEquals(Arrays.hashCode(new double[]{3,2,0}), Arrays.hashCode(mat.getRowArray(2)));
     assertEquals(Arrays.hashCode(new double[]{4,1,0}), Arrays.hashCode(mat.getRowArray(3)));
     }
+    
+    @Test
+    public void GenericMatrixTest(){
+        GenericMatrix<String> stringMatrix = new GenericMatrix<>(2, 2);
+        stringMatrix.setValue(1, 1, "Hello");
+        stringMatrix.setValue(1, 2, "World");
+        stringMatrix.setValue(2, 1, "OOP");
+        stringMatrix.setValue(2, 2, "Java");
+        
+        System.out.println(stringMatrix.toString());
+
+        GenericMatrix<String> stringMatrix1 = new GenericMatrix<>(2, 2);
+        stringMatrix1.setValue(1, 1, " World");
+        stringMatrix1.setValue(1, 2, " Hello");     
+        stringMatrix1.setValue(2, 1, " Java");
+        stringMatrix1.setValue(2, 2, " OOP");
+
+        stringMatrix.add(stringMatrix1);
+        assertEquals("Hello World", stringMatrix.getElement(1, 1).toString());
+        assertEquals("World Hello", stringMatrix.getElement(1, 2).toString());
+        assertEquals("OOP Java", stringMatrix.getElement(2, 1).toString());
+        assertEquals("Java OOP", stringMatrix.getElement(2, 2).toString());
+    }
+
+    @Test
+    public void GenericMatrixTest_1(){
+        GenericMatrix<Double> Matrix1 = new GenericMatrix<>(1,2);
+        Matrix1.setValue(1, 1, 2.1);
+        Matrix1.setValue(1, 2, 3.1);
+
+        GenericMatrix<Double> Matrix2 = new GenericMatrix<>(1,2);
+        Matrix2.setValue(1, 1, 2.1);
+        Matrix2.setValue(1, 2, 3.1);
+
+        Matrix1.add(Matrix2);
+
+        assertEquals(4.2, Matrix1.getElement(1, 1).getValue());
+        assertEquals(6.2, Matrix1.getElement(1, 2).getValue());
+    }
+    @Test
+    public void ExceptionGenericMatrixTest(){
+        GenericMatrix<Double> Matrix1 = new GenericMatrix<>(1,2);
+        Matrix1.setValue(1, 2, 3.1);
+
+        GenericMatrix<Double> Matrix2 = new GenericMatrix<>(1,2);
+        Matrix2.setValue(1, 1, 2.1);
+        Matrix2.setValue(1, 2, 3.1);
+
+        assertThrows(NullPointerException.class,
+         () ->Matrix1.add(Matrix2));
+
+    }
+
+    @Test
+    public void ExceptionGenericMatrixTest_1(){
+        GenericMatrix<Double> Matrix1 = new GenericMatrix<>(1,2);
+        Matrix1.setValue(1, 2, 3.1);
+
+        GenericMatrix<Double> Matrix2 = new GenericMatrix<>(2,2);
+        Matrix2.setValue(1, 1, 2.1);
+        Matrix2.setValue(1, 2, 3.1);
+
+        assertThrows(IllegalArgumentException.class,
+         () ->Matrix1.add(Matrix2));
+
+    }
+
+    @Test
+    public void ExceptionGenericMatrixTest_2(){
+        GenericMatrix<Double> Matrix1 = new GenericMatrix<>(1,2);
+    
+        assertThrows(IllegalArgumentException.class,
+         () ->Matrix1.setValue(1, 3, 3.1));
+        assertThrows(IllegalArgumentException.class,
+         () ->Matrix1.getElement(1, 3));
+    }
+
+    @Test
+    public void ExceptionGenericMatrixTest_3(){
+        
+    
+        assertThrows(IllegalArgumentException.class,
+         () -> new GenericMatrix<>(-1,2));
+        assertThrows(IllegalArgumentException.class,
+         () -> new GenericMatrix<>(0,2));
+    }
 }
