@@ -35,4 +35,53 @@ public class ImutableMatrix extends Matrix {
 
     }
 
+    @Override
+    public Matrix add(Matrix mat){
+        return new Matrix(this).add(mat);
+    }
+
+  
+    @Override
+    public Matrix add(double scalar){  
+        return new Matrix(this).add(scalar);
+    }
+
+    @Override
+    public Matrix multiply(Matrix mat){
+        return new Matrix(this).multiply(mat);
+    }
+    @Override
+    public Matrix multiply(double scalar){
+        return new Matrix(this).multiply(scalar);
+    }
+
+    @Override
+    public Matrix transpose(){
+        return new Matrix(this).transpose();
+    }
+    
+
+    @Override
+    public Matrix addToColumn(int column_n, double value){
+        return new Matrix(this).addToColumn(column_n, value);
+    }
+    @Override
+    public Matrix addToRow(int row_n, double value){
+        return new Matrix(this).addToRow(row_n, value);
+    }
+
+    @Override
+    public Matrix triangularShapeUpper(){
+        return new Matrix(this).triangularShapeUpper();
+    }
+
+    @Override
+    public Matrix triangularShapeLower(){
+        return new Matrix(this).triangularShapeLower();
+    }
+
+    @Override
+    public void setRandomValues(int min, int max){
+        throw new IllegalStateException("Can't change imutable matrix");
+    }
 }

@@ -93,7 +93,7 @@ public class MatrixTest {
     mat = new Matrix(3, 5);
 
     Exception exception = assertThrows(IllegalArgumentException.class,
-     () -> mat = new Matrix(mat,new int[]{4,2}, new int[]{2 ,2}));
+     () -> mat = new Matrix(mat,new int[]{2,2}, new int[]{4 ,2}));
         
     String expectedMessage = "Element num is bigger than matrix dim";
     String actualMessage = exception.getMessage();
@@ -292,6 +292,126 @@ public class MatrixTest {
     }
 
     @Test
+    public void ImutableMatrix_Add(){
+        mat = new Matrix(2, 2);
+        mat.setValue(1, 1, 10);
+        ImutableMatrix im_mat = new ImutableMatrix(mat.add(mat));
+        ImutableMatrix im_mat1 = new ImutableMatrix(im_mat.add(im_mat));
+        assertEquals(40, im_mat1.getValue(1, 1));
+    }
+
+    @Test
+    public void ImutableMatrix_AddNum(){
+        mat = new Matrix(2, 2);
+        mat.setValue(1, 1, 10);
+        ImutableMatrix im_mat = new ImutableMatrix(mat.add(2));
+        ImutableMatrix im_mat1 = new ImutableMatrix(im_mat.add(2));
+        assertEquals(14, im_mat1.getValue(1, 1));
+    }
+
+    @Test
+    public void ImutableMatrix_MultiplyNum(){
+        mat = new Matrix(2, 2);
+        mat.setValue(1, 1, 10);
+        ImutableMatrix im_mat = new ImutableMatrix(mat.multiply(2));
+        ImutableMatrix im_mat1 = new ImutableMatrix(im_mat.multiply(2));
+        assertEquals(40, im_mat1.getValue(1, 1));
+    }
+
+    @Test
+    public void ImutableMatrix_MultiplyMatrix(){
+        mat = new Matrix(2, 1);
+        
+        mat.setColumn(1, 1, 2);
+
+        Matrix mat1 = new Matrix(1, 2);
+
+        mat1.setRow(1, 2,3);
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+        ImutableMatrix im_mat1 = new ImutableMatrix(mat1);
+        im_mat = new ImutableMatrix(im_mat.multiply(im_mat1));
+        assertEquals(2, im_mat.getValue(1, 1));
+        assertEquals(3, im_mat.getValue(1, 2));
+        assertEquals(4, im_mat.getValue(2, 1));
+        assertEquals(6, im_mat.getValue(2, 2));
+    }
+
+    @Test
+    public void ImutableMatrix_Transpose(){
+        mat = new Matrix(2, 1);
+        
+        mat.setColumn(1, 1, 2);
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+        im_mat = new ImutableMatrix(im_mat.transpose());
+        assertEquals("1x2", im_mat.getDimension());
+        assertEquals(1, im_mat.getValue(1, 1));
+        assertEquals(2, im_mat.getValue(1, 2));
+    }
+
+    @Test
+    public void ImutableMatrix_AddToRow(){
+        mat = new Matrix(2, 1);
+        
+        mat.setColumn(1, 1, 2);
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+
+        im_mat = new ImutableMatrix(im_mat.addToRow(1,3));
+        assertEquals(4, im_mat.getValue(1, 1));
+        assertEquals(2, im_mat.getValue(2, 1));
+    }
+
+    @Test
+    public void ImutableMatrix_AddToColumn(){
+        mat = new Matrix(2, 1);
+        
+        mat.setColumn(1, 1, 2);
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+
+        im_mat = new ImutableMatrix(im_mat.addToColumn(1,3));
+        assertEquals(4, im_mat.getValue(1, 1));
+        assertEquals(5, im_mat.getValue(2, 1));
+    }
+
+    @Test
+    public void ImutableMatrix_TriangularUpper(){
+        mat = new Matrix(2, 2);
+        
+        mat.setColumn(1, 1, 2);
+        mat.setColumn(2, 3, 9);
+
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+
+        im_mat = new ImutableMatrix(im_mat.triangularShapeUpper());
+        assertEquals(1, im_mat.getValue(1, 1));
+        assertEquals(3, im_mat.getValue(1, 2));
+        assertEquals(0, im_mat.getValue(2, 1));
+        assertEquals(3, im_mat.getValue(2, 2));
+    }
+
+    @Test
+    public void ImutableMatrix_TriangularLower(){
+        mat = new Matrix(2, 2);
+        
+        mat.setRow(2, 2, 1);
+        mat.setRow(1, 8, 3);
+
+        ImutableMatrix im_mat = new ImutableMatrix(mat);
+
+        im_mat = new ImutableMatrix(im_mat.triangularShapeLower());
+        assertEquals(2, im_mat.getValue(1, 1));
+        assertEquals(0, im_mat.getValue(1, 2));
+        assertEquals(2, im_mat.getValue(2, 1));
+        assertEquals(1, im_mat.getValue(2, 2));
+    }
+
+    @Test
+    public void ImutableMatrix_ExceptionSetRandomValues(){
+        ImutableMatrix im_mat = new ImutableMatrix(2,2);
+        assertThrows(IllegalStateException.class,
+         () -> im_mat.setRandomValues(2, 3));
+    }
+
+    @Test
     public void equals_test_1(){
         mat = new Matrix(2, 2);
         assertTrue(mat.equals(mat));
@@ -306,18 +426,18 @@ public class MatrixTest {
     @Test
     public void add_value(){
         mat = new Matrix(2, 2);
-        mat.add(2);
-        assertEquals(2, mat.getValue(1, 1));
+        Matrix mat1 = mat.add(2);
+        assertEquals(2, mat1.getValue(1, 1));
     }
 
     @Test
     public void add_matrix(){
         mat = new Matrix(2, 2);
-        mat.add(2);
+        mat = mat.add(2);
         Matrix mat_1 = new Matrix(2, 2);
         mat_1.setRow(1, 2,3);
         mat_1.setRow(2, 5,6); 
-        mat.add(mat_1);
+        mat = mat.add(mat_1);
         assertEquals(Arrays.hashCode(new double[]{4,5}), Arrays.hashCode(mat.getRowArray(1)));
         assertEquals(Arrays.hashCode(new double[]{7,8}), Arrays.hashCode(mat.getRowArray(2)));
     }
@@ -336,16 +456,16 @@ public class MatrixTest {
     @Test
     public void addToRowTest(){
         mat = new Matrix(2, 2);
-        mat.add(2);
-        mat.addToRow(1, 1);
+        mat = mat.add(2);
+        mat = mat.addToRow(1, 1);
         assertEquals(3, mat.getValue(1, 1));
     }
 
     @Test
     public void addToColumnTest(){
         mat = new Matrix(2, 2);
-        mat.add(2);
-        mat.addToColumn(2, 1);
+        mat = mat.add(2);
+        mat = mat.addToColumn(2, 1);
         assertEquals(3, mat.getValue(1, 2));
     }
 
@@ -355,7 +475,7 @@ public class MatrixTest {
         mat.setRow(1, 2, 4);
         mat.setRow(2, 6, 1);
 
-        mat.multiply(3);
+        mat = mat.multiply(3);
         assertEquals(Arrays.hashCode(new double[]{6,12}), Arrays.hashCode(mat.getRowArray(1)));
         assertEquals(Arrays.hashCode(new double[]{18,3}), Arrays.hashCode(mat.getRowArray(2)));
     }
@@ -381,7 +501,7 @@ public class MatrixTest {
         mat_1.setColumn(1, 2,1,2);
         mat_1.setColumn(2, 3,5,5);
 
-        mat.multiply(mat_1);
+        mat = mat.multiply(mat_1);
         assertEquals(Arrays.hashCode(new double[]{10,28}), Arrays.hashCode(mat.getRowArray(1)));
         assertEquals(Arrays.hashCode(new double[]{29,73}), Arrays.hashCode(mat.getRowArray(2)));
     }
@@ -391,7 +511,7 @@ public class MatrixTest {
         mat = new Matrix(2, 3);
         mat.setRow(1, 2,5,2);
         mat.setRow(2, 4,5,6);
-        mat.transpose();
+        mat = mat.transpose();
         assertEquals("3x2", mat.getDimension());
         assertEquals(Arrays.hashCode(new double[]{2,5,2}), Arrays.hashCode(mat.getColumnArray(1)));
         assertEquals(Arrays.hashCode(new double[]{4,5,6}), Arrays.hashCode(mat.getColumnArray(2)));
@@ -399,8 +519,7 @@ public class MatrixTest {
 
     @Test
     public void diagonalizeMatrix(){
-        mat = new Matrix();
-        mat.diagonalize(1,-2,5);
+        mat =  Matrix.diagonalize(1,-2,5);
         assertEquals("3x3", mat.getDimension());
         assertEquals(1, mat.getValue(1, 1));
         assertEquals(0, mat.getValue(2, 1));
@@ -410,8 +529,7 @@ public class MatrixTest {
     
     @Test
     public void unitMatrix(){
-        mat = new Matrix();
-        mat.unit(3);
+        mat = Matrix.unit(3);
         assertEquals("3x3", mat.getDimension());
         assertEquals(Arrays.hashCode(new double[]{1,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
         assertEquals(Arrays.hashCode(new double[]{0,1,0}), Arrays.hashCode(mat.getColumnArray(2)));
@@ -420,48 +538,64 @@ public class MatrixTest {
 
     @Test
     public void ExceptionUnitMatrix(){
-        mat = new Matrix();
 
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> mat.unit(-1));
+            () -> Matrix.unit(-1));
         String expecterMessage = "Order of matrix can't be negative: -1"; 
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expecterMessage));        
     }
 
     @Test
-    public void setRandomRowMatrixTest(){
-        mat = new Matrix();
-        mat.setRandomRowMatrix(3);
+    public void createRandomRowMatrixTest(){
+        mat = Matrix.createRandomRowMatrix(3);
         assertEquals("1x3", mat.getDimension());
     }
 
     @Test
-    public void ExceptionsetRandomRowMatrix(){
-        mat = new Matrix();
-
+    public void ExceptioncreateRandomRowMatrix(){
+        assertThrows(IllegalArgumentException.class,
+            () -> Matrix.createRandomRowMatrix(3,20,2));
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> mat.setRandomRowMatrix(-3));
+            () -> Matrix.createRandomRowMatrix(-3));
         String expecterMessage = "Row lenght can't be negative: -3"; 
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expecterMessage));        
     }
 
     @Test
-    public void ExceptionsetRandomColumnMatrix(){
-        mat = new Matrix();
-
+    public void ExceptioncreateRandomColumnMatrix(){
+        assertThrows(IllegalArgumentException.class,
+            () -> Matrix.createRandomColumnMatrix(3,20,2));
         Exception exception = assertThrows(IllegalArgumentException.class,
-            () -> mat.setRandomColumnMatrix(-3));
+            () -> Matrix.createRandomColumnMatrix(-3));
         String expecterMessage = "Column lenght can't be negative: -3"; 
         String actualMessage = exception.getMessage();
         assertTrue(actualMessage.contains(expecterMessage));        
     }
     @Test
-    public void setRandomColumnMatrixTest(){
-    mat = new Matrix();
-    mat.setRandomColumnMatrix(3);
+    public void createRandomColumnMatrixTest(){
+    mat = Matrix.createRandomColumnMatrix(3);
     assertEquals("3x1", mat.getDimension());
+    }
+
+    @Test
+    public void setRandomValuesTest(){
+        mat = new Matrix(3,3);
+        mat.setRandomValues(1, 10);
+        Matrix.main(null);
+        mat.toString();
+        assertEquals("3x3", mat.getDimension());
+    }
+
+    @Test
+    public void ExceptionRandomMinMax(){
+        mat = new Matrix(3,2);
+        Exception exception = assertThrows(IllegalArgumentException.class,
+            () -> mat.setRandomValues(10, 1));
+        String expecterMessage = "Minimum must be smaller than Maximum"; 
+        String actualMessage = exception.getMessage();
+        assertTrue(actualMessage.contains(expecterMessage)); 
     }
 
     @Test
@@ -470,7 +604,7 @@ public class MatrixTest {
     mat.setColumn(1, 2, 1, 3);
     mat.setColumn(2, 1, 0, 5);
 
-    mat.triangularShapeUpper();
+    mat = mat.triangularShapeUpper();
     assertEquals(Arrays.hashCode(new double[]{2,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
     assertEquals(Arrays.hashCode(new double[]{1,-0.5,0}), Arrays.hashCode(mat.getColumnArray(2)));
     }
@@ -481,7 +615,7 @@ public class MatrixTest {
     mat.setColumn(1, 0,2,3);
     mat.setColumn(2, 2,1,4);
 
-    mat.triangularShapeUpper();
+    mat = mat.triangularShapeUpper();
     assertEquals(Arrays.hashCode(new double[]{2,0,0}), Arrays.hashCode(mat.getColumnArray(1)));
     assertEquals(Arrays.hashCode(new double[]{1,2,0}), Arrays.hashCode(mat.getColumnArray(2)));
     }
@@ -492,7 +626,7 @@ public class MatrixTest {
     mat.setRow(1, 0,2,3);
     mat.setRow(2, 2,1,4);
 
-    mat.triangularShapeUpper();
+    mat = mat.triangularShapeUpper();
     assertEquals(Arrays.hashCode(new double[]{2,1,4}), Arrays.hashCode(mat.getRowArray(1)));
     assertEquals(Arrays.hashCode(new double[]{0,2,3}), Arrays.hashCode(mat.getRowArray(2)));
     }
@@ -504,7 +638,7 @@ public class MatrixTest {
     mat.setColumn(2, 3,4,5);
     mat.setColumn(3, 0,0,0);
 
-    mat.triangularShapeUpper();
+    mat = mat.triangularShapeUpper();
     assertEquals(Arrays.hashCode(new double[]{2,3,0}), Arrays.hashCode(mat.getRowArray(1)));
     assertEquals(Arrays.hashCode(new double[]{0,2.5,0}), Arrays.hashCode(mat.getRowArray(2)));
     assertEquals(Arrays.hashCode(new double[]{0,0,0}), Arrays.hashCode(mat.getRowArray(3)));
@@ -517,10 +651,10 @@ public class MatrixTest {
     mat.setColumn(2, 2,1,2);
     mat.setColumn(3, 1,6,3);
 
-    mat.triangularShapeUpper();
-    assertEquals(Arrays.hashCode(new double[]{0,2,1}), Arrays.hashCode(mat.getRowArray(1)));
-    assertEquals(Arrays.hashCode(new double[]{0,1,6}), Arrays.hashCode(mat.getRowArray(2)));
-    assertEquals(Arrays.hashCode(new double[]{0,0,-9}), Arrays.hashCode(mat.getRowArray(3)));
+    Matrix mat1 = mat.triangularShapeUpper();
+    assertEquals(Arrays.hashCode(new double[]{0,2,1}), Arrays.hashCode(mat1.getRowArray(1)));
+    assertEquals(Arrays.hashCode(new double[]{0,1,6}), Arrays.hashCode(mat1.getRowArray(2)));
+    assertEquals(Arrays.hashCode(new double[]{0,0,-9}), Arrays.hashCode(mat1.getRowArray(3)));
     }
 
     @Test
@@ -529,7 +663,7 @@ public class MatrixTest {
     mat.setRow(1, 2,3,4);
     mat.setRow(2, 1,2,1);
 
-    mat.triangularShapeLower();
+    mat = mat.triangularShapeLower();
     assertEquals(Arrays.hashCode(new double[]{-2,-5,0}), Arrays.hashCode(mat.getRowArray(1)));
     assertEquals(Arrays.hashCode(new double[]{1,2,1}), Arrays.hashCode(mat.getRowArray(2)));
     }
@@ -540,7 +674,7 @@ public class MatrixTest {
     mat.setColumn(1, 2,3,4);
     mat.setColumn(2, 1,2,1);
 
-    mat.triangularShapeLower();
+    mat = mat.triangularShapeLower();
     assertEquals(Arrays.hashCode(new double[]{0,-5,4}), Arrays.hashCode(mat.getColumnArray(1)));
     assertEquals(Arrays.hashCode(new double[]{0,0,1}), Arrays.hashCode(mat.getColumnArray(2)));
     }
@@ -552,7 +686,7 @@ public class MatrixTest {
     mat.setColumn(2, 2,2,1);
     mat.setColumn(3, 1,0,0);
 
-    mat.triangularShapeLower();
+    mat = mat.triangularShapeLower();
     assertEquals(Arrays.hashCode(new double[]{4,0,0}), Arrays.hashCode(mat.getRowArray(1)));
     assertEquals(Arrays.hashCode(new double[]{4,2,0}), Arrays.hashCode(mat.getRowArray(2)));
     assertEquals(Arrays.hashCode(new double[]{3,2,1}), Arrays.hashCode(mat.getRowArray(3)));
@@ -565,7 +699,7 @@ public class MatrixTest {
     mat.setColumn(2, 1,2,1);
     mat.setColumn(3, 0,0,0);
 
-    mat.triangularShapeLower();
+    mat = mat.triangularShapeLower();
     assertEquals(Arrays.hashCode(new double[]{0.5,0,0}), Arrays.hashCode(mat.getRowArray(1)));
     assertEquals(Arrays.hashCode(new double[]{3,2,0}), Arrays.hashCode(mat.getRowArray(2)));
     assertEquals(Arrays.hashCode(new double[]{4,1,0}), Arrays.hashCode(mat.getRowArray(3)));
@@ -656,4 +790,5 @@ public class MatrixTest {
         assertThrows(IllegalArgumentException.class,
          () -> new GenericMatrix<>(0,2));
     }
+
 }
