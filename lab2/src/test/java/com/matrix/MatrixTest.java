@@ -580,15 +580,6 @@ public class MatrixTest {
     }
 
     @Test
-    public void setRandomValuesTest(){
-        mat = new Matrix(3,3);
-        mat.setRandomValues(1, 10);
-        Matrix.main(null);
-        mat.toString();
-        assertEquals("3x3", mat.getDimension());
-    }
-
-    @Test
     public void ExceptionRandomMinMax(){
         mat = new Matrix(3,2);
         Exception exception = assertThrows(IllegalArgumentException.class,

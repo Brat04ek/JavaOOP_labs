@@ -392,22 +392,4 @@ public class Matrix {
         return result.toString();
     }
 
-    public static void main(String[] args) {
-        Matrix a1 = new Matrix(2, 3);
-        a1.setRandomValues(1, 3);
-        System.out.println(a1);
-        ImutableMatrix a2 = new ImutableMatrix(a1);
-
-        System.out.println(a2);
-        
-        a1.setValue(1, 1, -100);
-        System.out.println(a1);
-
-
-        ImutableMatrix a3 = new ImutableMatrix(a2);
-        System.out.println(a3);
-
-        ImutableMatrix a4 = new ImutableMatrix(a2.add(a3));
-        System.out.println(a4);
-    }
 }
